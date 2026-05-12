@@ -1,5 +1,10 @@
 [phases.setup]
-nixPkgs = ["php81", "php81Extensions.pdo", "php81Extensions.pdo_mysql", "php81Extensions.mbstring", "php81Extensions.xml", "php81Extensions.curl", "php81Extensions.openssl", "php81Extensions.tokenizer", "php81Extensions.ctype", "php81Extensions.fileinfo", "php81Extensions.bcmath"]
+nixPkgs = ["php81", "php81Packages.composer"]
+nixLibs = ["libmysqlclient"]
+nixOverlays = ["https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz"]
+
+[phases.install]
+cmds = ["mkdir -p /opt/storage/framework/{sessions,views,cache}", "composer install --no-dev --optimize-autoloader"]
 
 [start]
 cmd = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080"
