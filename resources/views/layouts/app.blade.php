@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
     <style>
         /* ======================================
            APPLE-INSPIRED DESIGN SYSTEM
@@ -583,10 +584,33 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--apple-gray-5); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--apple-gray-4); }
+        /* HTMX Loader */
+        #global-loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 9999;
+            opacity: 0; transition: opacity 0.2s ease; pointer-events: none;
+        }
+        .htmx-request#global-loader {
+            opacity: 1;
+        }
+        .loader-bar {
+            height: 100%; background: var(--apple-blue);
+            width: 30%;
+            animation: loadingBar 1s infinite ease-in-out alternate;
+            border-radius: 0 3px 3px 0;
+            box-shadow: 0 0 10px rgba(0,113,227,0.5);
+        }
+        @keyframes loadingBar {
+            0% { transform: translateX(-100%); width: 30%; }
+            100% { transform: translateX(350%); width: 50%; }
+        }
     </style>
 </head>
-<body>
+<body hx-boost="true" hx-indicator="#global-loader">
+    <!-- GLOBAL LOADER -->
+    <div id="global-loader">
+        <div class="loader-bar"></div>
+    </div>
+
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-brand">
@@ -731,6 +755,7 @@
         }
         
         document.addEventListener('DOMContentLoaded', initDatePicker);
+        document.addEventListener('htmx:afterSwap', initDatePicker);
 
         // Currency Formatting Utility
         document.addEventListener('input', function(e) {
