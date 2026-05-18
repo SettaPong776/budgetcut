@@ -7,4 +7,4 @@ nixOverlays = ["https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.g
 cmds = ["mkdir -p /opt/storage/framework/{sessions,views,cache}", "composer install --no-dev --optimize-autoloader"]
 
 [start]
-cmd = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080"
+cmd = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
